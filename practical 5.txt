@@ -1,0 +1,79 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+     
+
+dataset = pd.read_csv("/content/Social_Network_Ads.csv")
+dataset
+
+
+dataset.isnull().sum()
+     
+x = dataset.iloc[:,[2,3]].values
+y = dataset.iloc[:,4].values
+     
+
+from sklearn.model_selection import train_test_split
+xtrain,xtest,ytrain,ytest = train_test_split(x,y,test_size = 0.25,random_state=0)
+     
+
+print(xtrain[:3])
+print('-'*15)
+print(ytrain[:3])
+print('-'*15)
+print(xtest[:3])
+print('-'*15)
+print(ytest[:3])
+     
+from sklearn.preprocessing import StandardScaler  
+scx = StandardScaler()
+xtrain = scx.fit_transform(xtrain)
+xtest = scx.fit_transform(xtest)
+     
+
+print(xtrain[:3])
+print('-'*15)
+print(xtest[:3])
+     
+from sklearn.linear_model import LogisticRegression
+classifier = LogisticRegression(random_state=0,solver='lbfgs')
+classifier.fit(xtrain,ytrain)
+ypred = classifier.predict(xtest)
+xtest[:10]
+
+print('-'*15)
+print(ypred[:10])
+
+print(ypred[:20])
+print(ytest[:20])
+     
+
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(ytest,ypred)
+cm
+    
+
+from matplotlib.colors import ListedColormap
+xset,yset = xtrain,ytrain
+x1,x2 = np.meshgrid(np.arange(start=xset[:,0].min()-1,stop=xset[:,0].max()+1,step=0.01),
+                    np.arange(start=xset[:,1].min()-1,stop=xset[:,1].max()+1,step=0.01))
+plt.contourf(x1,x2,classifier.predict(np.array([x1.ravel(),x2.ravel()]).T).reshape(x1.shape),
+             alpha = 0.6, cmap=ListedColormap(('red','green')))
+plt.xlim(x1.min(),x1.max())
+plt.ylim(x2.min(),x2.max())
+
+for i, j in enumerate(np.unique(yset)):
+    plt.scatter(xset[yset == j, 0], xset[yset == j, 1], 
+                c=ListedColormap(('red', 'green'))(i), label=j)
+
+plt.title('Logistic Regression (Training set)')
+plt.xlabel('Age')
+plt.ylabel('Estimated Salary')
+plt.legend()
+plt.show()
+
+
+
+
+     

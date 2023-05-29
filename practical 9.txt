@@ -1,0 +1,13 @@
+
+import pandas as pd
+import numpy as np
+dataset = sns.load_dataset('titanic')
+dataset.head()
+sns.boxplot(x='sex', y='age', data=dataset, palette={"yellow","pink"})
+
+sns.boxplot(x='sex', y='age', data=dataset, hue='survived', palette=['red', 'green'])
+
+
+#change color using palette, key value pair, 
+hue="Sex", palette={"male": "blue", "female": "pink"}
+ 

@@ -1,0 +1,32 @@
+
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from matplotlib import pyplot as plt
+df1=pd.read_csv(r"C:\Users\aakas\OneDrive\Desktop\dsbda pracs\Titanic-Dataset.csv")
+df1.head()
+
+df1.replace("?",np.nan,inplace=True) #replaces any occurrences of "?" with NaN
+df2=df1.dropna() #create new df2 by removing rows with nAn from df1
+df2.head()
+
+df2.shape # no. of row and col
+(183, 12)
+df1.shape
+(891, 12)
+sns.relplot(x="Age",y="Fare",data=df2) #creates scatterplot for relationship between "Age" and "Fare"
+
+
+sns.relplot(x="Age",y="Fare",data=df2,hue="Sex") #adds 1 more dimenstion to the plot
+
+
+sns.histplot(df2.Fare,bins=10) #bins parameter specifies 10 bins(range of values) to divide the data into. (10 equal intervals)
+
+
+sns.catplot(x="Pclass",y="Fare",data=df2,kind="box") #creates a categorical plot, box plot used for visualization.
+
+
+sns.catplot(x="Pclass",y="Survived",data=df2,kind="bar")# " " bar plot used
+
+
+ 

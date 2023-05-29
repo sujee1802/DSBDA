@@ -1,0 +1,90 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+
+# Read the CSV file into a DataFrame
+df = pd.read_csv("C:\\Users\\Admin\\Desktop\\StudentPerformance.csv")
+print(df)
+df.isnull()
+df.isnull().sum()
+df.notnull()
+series1 = pd.notnull(df["Maths_Score"])
+df[series1]
+ndf = df.copy()
+ndf.fillna(0)
+df['Maths_Score'] = df['Maths_Score'].fillna(df['Maths_Score'].mean())
+ndf.replace(to_replace=np.nan, value=-99)
+ndf.dropna()
+
+# Boxplot--> Summaries sample data using 25th, 50th, 75th value
+col = ['Maths_Score', 'Reading_Score', 'Writing_Score', 'Placement_Score']
+df.boxplot(col)
+fig, ax = plt.subplots(figsize=(18, 10))
+ax.scatter(df['Placement_Score'], df['Placement offer count'])
+plt.show()
+
+# Identifying Outliers with Visualization
+new_df = df.copy()
+new_df.boxplot(col)
+plt.show()
+
+# Identifying Outliers with Interquartile Range (IQR)
+q1 = np.percentile(df['Maths_Score'], 25)
+q3 = np.percentile(df['Maths_Score'], 75)
+print(q1, q3)
+
+IQR = q3 - q1
+lwr_bound = q1 - (1.5 * IQR)
+upr_bound = q3 + (1.5 * IQR)
+print(lwr_bound, upr_bound)
+
+index_outliers = np.where((df[col] < lwr_bound) | (df[col] > upr_bound))
+sample_outliers = df[col][((df[col] < lwr_bound) | (df[col] > upr_bound))]
+
+df1 = df.copy()
+df[col] = np.where(df1[col] < lwr_bound, lwr_bound, df[col])
+df[col] = np.where(df1[col] > upr_bound, upr_bound, df[col])
+
+df1
+
+df5 = pd.read_csv("C:\\Users\\Admin\\Desktop\\StudentPerformance.csv")
+ninetieth_percentile = np.percentile(df5['Maths_Score'], 90)
+tenth_percentile = np.percentile(df5['Maths_Score'], 10)
+
+df5[col] = np.where(df5[col] > upr_bound, ninetieth_percentile, df5[col])
+df5[col] = np.where(df5[col] < lwr_bound, tenth_percentile, df5[col])
+
+df5
+
+median = np.median(new_df[col])
+
+for i in index_outliers:
+    new_df.at[i, col] = median
+
+new_df
+
+df3 = pd.read_csv("C:\\Users\\Admin\\Desktop\\StudentPerformance.csv")
+z = np.abs(stats.zscore(df3['Maths_Score']))
+print(z)
+
+Upperthreshold = 1.4
+Lowerthreshold = 0.18
+index_outliers = np.where((z < Lowerthreshold) | (z > Upperthreshold))
+sample_outliers = z[(z < Lowerthreshold) | (z > Upperthreshold)]
+
+new_df2 = df3.copy()
+for i in index_outliers:
+    new_df2.drop(i, inplace=True)
+
+new_df2
+
+df4 = pd.read_csv("C:\\Users\\Admin\\Desktop\\StudentPerformance.csv")
+df4['Maths_Score'].plot(kind='bar')
+
+df_min_max_scaled = df4.copy()
+colu = ['Maths_Score']
+df_min_max_scaled[colu] = (df_min_max_scaled[colu] - df_min_max_scaled[colu].min()) / (df_min_max_scaled[colu].max() - df_min_max_scaled[colu].min())
+print(df_min_max_scaled)
+
+df4.skew(axis=1, skipna=True)

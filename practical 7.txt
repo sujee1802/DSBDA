@@ -1,0 +1,95 @@
+
+import pandas as pd
+with open('doc1.txt','r')as fp1:
+    s1=fp1.read()
+with open('doc2.txt','r')as fp2:
+    s2=fp2.read()
+
+#Tokenization.
+import nltk
+from nltk import *
+from nltk.corpus import *
+from nltk.stem import *
+
+t1=word_tokenize(s1)
+t2=word_tokenize(s2)
+print(t1)
+print(t2)
+#Stop Words Removal.
+nltk.download('stopwords')
+def removal(l):
+    s=stopwords.words('english')
+    k=[]
+    for w in l:
+        if w not in s:
+            k.append(w)
+    return k
+s3=removal(t1)
+s4=removal(t2)
+print(s3)
+print(s4)
+            
+    
+#Lemmatization
+lemmatizer=WordNetLemmatizer()
+def lem(l):
+    m=[]
+    for w in l:
+        m.append(lemmatizer.lemmatize(w))
+    return m
+m1=lem(s3)
+m2=lem(s4)
+print(m1)
+print(m2)
+#POS Tagging
+p1=nltk.pos_tag(m1)
+p2=nltk.pos_tag(m2)
+print(p1)
+print(p2)
+#Tf
+def tf(l):
+    d={}
+    for i in l:
+        if i in d:
+            d[i]+=1
+        else:
+            d[i]=1
+    count=sum(d.values())
+    for i in d:
+        d[i]=d[i]/count
+    return d
+y1=tf(m1)
+y2=tf(m2)
+print(y1)
+print(y2)
+#Idf
+import math
+def idf(l):
+    corpusdict={}
+    for i in y1:
+        if i in y2:
+            corpusdict[i]=2
+        else:
+            corpusdict[i]=1
+    for i in y2:
+        if i not in y1:
+            corpusdict[i]=1
+    idf={}
+    for i in corpusdict:
+        idf[i]=math.log(2/corpusdict[i])
+    return idf
+i1=idf(m1)
+i2=idf(m2)
+print("IDF is",i1)
+print("IDF is",i2)
+#Tf idf
+def tfidf(d,idf):
+    dict={}
+    for i in d:
+        dict[i]=d[i]*idf[i]
+    return dict
+tfidf1=tfidf(y1,i1)
+tfidf2=tfidf(y2,i2)
+print(tfidf1)
+print(tfidf2)
+ 

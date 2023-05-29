@@ -1,0 +1,54 @@
+import pandas as pd
+import numpy as np
+
+
+df = pd.read_csv("C:\\Users\\Admin\\Desktop\\Mall_Customers.csv")
+
+summary_stats = df.groupby("Genre").describe()
+
+
+mean = df.mean()
+
+
+median = df.median()
+
+
+std_dev = df.std()
+
+
+min_value = df.min()
+
+
+max_value = df.max()
+
+
+mean_age = df["Age"].mean()
+
+
+mode_age = df["Age"].mode()
+
+
+median_age = df["Age"].median()
+
+
+std_dev_age = df["Age"].std()
+
+
+csv_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
+df_iris = pd.read_csv(csv_url,header=None)
+col_names = ['Sepal_Length', 'Sepal_Width', 'Petal_Length', 'Petal_Width', 'Species']
+df_iris = pd.read_csv(csv_url, names=col_names)
+df_iris
+
+gk = df_iris.groupby('Species')
+gk.first()
+gk.describe()
+#load all rows of Iris-setosa into iris_Set
+iris_Set=(df_iris['Species']=="Iris-setosa")
+#To display basic statistical details like percentile,mean,std deviation etc for Iris-setosa using describe()
+print("Iris-setosa")
+print(df_iris[iris_Set].describe())
+iris_Vir=(df_iris['Species']=="Iris-virginica")
+print(df_iris[iris_Vir].describe())
+iris_Ver=(df_iris['Species']=="Iris-versicolor")
+print(df_iris[iris_Ver].describe())

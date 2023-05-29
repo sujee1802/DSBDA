@@ -1,0 +1,28 @@
+import numpy as np
+import pandas as pd 
+df = pd.read_csv("C:/Users/aakas/OneDrive/Desktop/dsbda pracs/weather.csv")
+print(df)
+df.head()
+df.tail()
+df.describe()
+df.replace(" ",np.nan,inplace=True)
+df.head(9)
+missingdata=df.isnull() 
+df.isnull().sum()
+df.dropna() 
+df
+df.dropna(axis=1) 
+df.dropna(how='all')
+df.dropna(subset=['Sunshine'])
+mean_value=df['MinTemp'].mean()
+mean_value
+df['MinTemp']=df['MinTemp'].fillna(mean_value)
+df
+df.dtypes
+df[["Evaporation"]]=df[["Evaporation"]].astype("int64")
+df.head()
+df3=df.copy()
+df3=pd.get_dummies(df3,columns=['Evaporation']) 
+display(df3)
+ 
+ 
